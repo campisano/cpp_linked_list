@@ -81,6 +81,17 @@ namespace containers
             }
         }
 
+        void prepend(const T _val)
+        {
+            if(m_first == NULL) {
+                m_first = m_last = new Node<T>(_val, NULL);
+            }
+            else
+            {
+                m_first = new Node<T>(_val, m_first);
+            }
+        }
+
         std::string toString() const
         {
             std::stringstream ss;
