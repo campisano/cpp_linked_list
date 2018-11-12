@@ -30,7 +30,7 @@ int main() {
     containers::It<int> it;
 
     int i = 0;
-    for(it = ll.start(); it != ll.end(); ++it)
+    for(it = ll.first(); it != ll.end(); ++it)
     {
         std::cout << i++ << ": " << *it <<  std::endl;
     }

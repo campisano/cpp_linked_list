@@ -52,11 +52,11 @@ namespace containers
     class LinkedList
     {
     public:
-        explicit LinkedList() : m_start(NULL), m_end(NULL) {}
+        explicit LinkedList() : m_first(NULL), m_last(NULL) {}
         virtual ~LinkedList()
         {
             const Node<T> * to_delete;
-            const Node<T> * i = m_start;
+            const Node<T> * i = m_first;
             while(i != NULL)
             {
                 to_delete = i;
@@ -65,18 +65,19 @@ namespace containers
             }
         }
 
-        It<T> start() const { return It<T>(m_start); }
-        It<T> end() const { return It<T>(m_end); }
+        It<T> first() const { return It<T>(m_first); }
+        It<T> last() const { return It<T>(m_last); }
+        It<T> end() const { return It<T>(NULL); }
 
         void append(const T _val)
         {
-            if(m_start == NULL) {
-                m_start = m_end = new Node<T>(_val, NULL);
+            if(m_first == NULL) {
+                m_first = m_last = new Node<T>(_val, NULL);
             }
             else
             {
-                m_end->next = new Node<T>(_val, NULL);
-                m_end = m_end->next;
+                m_last->next = new Node<T>(_val, NULL);
+                m_last = m_last->next;
             }
         }
 
@@ -84,7 +85,7 @@ namespace containers
         {
             std::stringstream ss;
 
-            for(It<T> it = start(); it != end(); ++it)
+            for(It<T> it = first(); it != end(); ++it)
             {
                 ss << '[' << *it << ']';
             }
@@ -93,8 +94,8 @@ namespace containers
         }
 
     private:
-        Node<T> * m_start;
-        Node<T> * m_end;
+        Node<T> * m_first;
+        Node<T> * m_last;
     };
 }
 
