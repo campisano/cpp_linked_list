@@ -4,7 +4,7 @@
 int main() {
     std::cout << "main" << std::endl;
 
-    containers::LinkedList ll;
+    containers::LinkedList<int> ll;
 
     ll.append(1);
     ll.append(2);
@@ -27,7 +27,7 @@ int main() {
 
     std::cout << ll.toString() << std::endl;
 
-    containers::It it;
+    containers::It<int> it;
 
     int i = 0;
     for(it = ll.start(); it != ll.end(); ++it)
