@@ -10,8 +10,14 @@ namespace containers
     template <typename T>
     struct Node
     {
-        explicit Node() : next(NULL) {std::cout << "Node(" << value << ")" << std::endl;}
-        virtual ~Node() {std::cout << "~Node(" << value << ")" << std::endl;}
+        explicit Node(T _value, Node * _next) : value(_value), next(_next)
+        {
+            std::cout << "Node(" << value << ")" << std::endl;
+        }
+        virtual ~Node()
+        {
+            std::cout << "~Node(" << value << ")" << std::endl;
+        }
         T value;
         Node * next;
     };
@@ -20,98 +26,76 @@ namespace containers
     class It
     {
     public:
-        explicit It() : current(NULL) {}
-        explicit It(Node<T> * _node) : current(_node) {}
+        explicit It() : node(NULL) {}
+        explicit It(Node<T> * _node) : node(_node) {}
 
-        bool operator !=(const It<T> & _node) const
+        bool operator !=(const It<T> & _other) const
         {
-            return current != _node.current;
+            return node != _other.node;
         }
 
         It & operator ++()
         {
-            if (current) current = current->next;
+            if (node) node = node->next;
             return * this;
         }
 
         T operator*()
         {
-            return current->value;
+            return node->value;
         }
     private:
-        Node<T> * current;
+        Node<T> * node;
     };
 
     template <typename T>
     class LinkedList
     {
     public:
-        explicit LinkedList();
-        virtual ~LinkedList();
+        explicit LinkedList() : m_start(NULL), m_end(NULL) {}
+        virtual ~LinkedList()
+        {
+            const Node<T> * to_delete;
+            const Node<T> * i = m_start;
+            while(i != NULL)
+            {
+                to_delete = i;
+                i = i->next;
+                delete to_delete;
+            }
+        }
 
-        It<T> start() const;
-        It<T> end() const;
+        It<T> start() const { return It<T>(m_start); }
+        It<T> end() const { return It<T>(m_end); }
 
-        void append(const T _val);
+        void append(const T _val)
+        {
+            if(m_start == NULL) {
+                m_start = m_end = new Node<T>(_val, NULL);
+            }
+            else
+            {
+                m_end->next = new Node<T>(_val, NULL);
+                m_end = m_end->next;
+            }
+        }
 
-        std::string toString() const;
+        std::string toString() const
+        {
+            std::stringstream ss;
+
+            for(It<T> it = start(); it != end(); ++it)
+            {
+                ss << '[' << *it << ']';
+            }
+
+            return ss.str();
+        }
 
     private:
         Node<T> * m_start;
         Node<T> * m_end;
     };
-
-    template<typename T>
-    LinkedList<T>::LinkedList()
-    {
-        // TODO nosense an empty node, node should ever have a value in the constructor call
-        m_end = new Node<T>();
-        m_start = m_end;
-    }
-
-    template<typename T>
-    LinkedList<T>::~LinkedList()
-    {
-        const Node<T> * to_del;
-        const Node<T> * i = m_start;
-        while(i != m_end)
-        {
-            to_del = i;
-            i = i->next;
-            delete to_del;
-        }
-
-        delete m_end;
-    }
-
-    template<typename T>
-    It<T> LinkedList<T>::start() const {
-        return It<T>(m_start);
-    }
-
-    template<typename T>
-    It<T> LinkedList<T>::end() const {
-        return It<T>(m_end);
-    }
-
-    template<typename T>
-    std::string LinkedList<T>::toString() const {
-        std::stringstream ss;
-
-        for(It<T> it = start(); it != end(); ++it)
-        {
-            ss << '[' << *it << ']';
-        }
-
-        return ss.str();
-    }
-
-    template <typename T>
-    void LinkedList<T>::append(const T _val) {
-        m_end->value = _val;
-        m_end->next = new Node<T>();
-        m_end = m_end->next;
-    }
 }
 
 #endif
