@@ -10,15 +10,19 @@ namespace containers
     template <typename T>
     struct Node
     {
-        explicit Node(T _value, Node * _next) : value(_value), next(_next)
+        explicit Node(T _value, Node* _prev, Node * _next) :
+            value(_value), prev(_prev), next(_next)
         {
             std::cout << "Node(" << value << ")" << std::endl;
         }
+
         virtual ~Node()
         {
             std::cout << "~Node(" << value << ")" << std::endl;
         }
+
         T value;
+        Node * prev;
         Node * next;
     };
 
@@ -40,6 +44,12 @@ namespace containers
             return * this;
         }
 
+        It & operator --()
+        {
+            if (node) node = node->prev;
+            return * this;
+        }
+
         T operator*()
         {
             return node->value;
@@ -53,6 +63,7 @@ namespace containers
     {
     public:
         explicit LinkedList() : m_first(NULL), m_last(NULL) {}
+
         virtual ~LinkedList()
         {
             const Node<T> * to_delete;
@@ -72,11 +83,11 @@ namespace containers
         void append(const T _val)
         {
             if(m_first == NULL) {
-                m_first = m_last = new Node<T>(_val, NULL);
+                m_first = m_last = new Node<T>(_val, NULL, NULL);
             }
             else
             {
-                m_last->next = new Node<T>(_val, NULL);
+                m_last->next = new Node<T>(_val, m_last, NULL);
                 m_last = m_last->next;
             }
         }
@@ -84,11 +95,12 @@ namespace containers
         void prepend(const T _val)
         {
             if(m_first == NULL) {
-                m_first = m_last = new Node<T>(_val, NULL);
+                m_first = m_last = new Node<T>(_val, NULL, NULL);
             }
             else
             {
-                m_first = new Node<T>(_val, m_first);
+                m_first->prev = new Node<T>(_val, NULL, m_first);
+                m_first = m_first->prev;
             }
         }
 

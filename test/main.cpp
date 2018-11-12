@@ -32,7 +32,13 @@ int main() {
     int i = 0;
     for(it = ll.first(); it != ll.end(); ++it)
     {
-        std::cout << i++ << ": " << *it <<  std::endl;
+        std::cout << "ll[" << i++ << "]:\t" << *it <<  std::endl;
+    }
+
+    i--;
+    for(it = ll.last(); it != ll.end(); --it)
+    {
+        std::cout << "ll[" << i-- << "]:\t" << *it <<  std::endl;
     }
 
     return 0;
