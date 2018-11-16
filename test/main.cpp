@@ -1,10 +1,13 @@
 #include <iostream>
 #include <linked_list.hpp>
 
+typedef containers::LinkedList<int> LLi;
+typedef containers::It<int> Iti;
+
 int main() {
     std::cout << "main" << std::endl;
 
-    containers::LinkedList<int> ll;
+    LLi ll;
 
     ll.append(1);
     ll.append(2);
@@ -27,7 +30,7 @@ int main() {
 
     std::cout << ll.toString() << std::endl;
 
-    containers::It<int> it;
+    Iti it;
 
     int i = 0;
     for(it = ll.first(); it != ll.end(); ++it)

@@ -1,8 +1,8 @@
 #ifndef LINKED_LIST__HPP
 #define LINKED_LIST__HPP
 
-#include <iostream>
 #include <sstream>
+#include <cstdint>
 #include <string>
 
 namespace containers
@@ -10,16 +10,11 @@ namespace containers
     template <typename T>
     struct Node
     {
-        explicit Node(T _value, Node* _prev, Node * _next) :
-            value(_value), prev(_prev), next(_next)
-        {
-            std::cout << "Node(" << value << ")" << std::endl;
-        }
+        explicit Node(
+            const T & _value, Node * _prev, Node * _next) :
+            value(_value), prev(_prev), next(_next) {}
 
-        virtual ~Node()
-        {
-            std::cout << "~Node(" << value << ")" << std::endl;
-        }
+        virtual ~Node() {}
 
         T value;
         Node * prev;
@@ -30,39 +25,39 @@ namespace containers
     class It
     {
     public:
-        explicit It() : node(NULL) {}
-        explicit It(Node<T> * _node) : node(_node) {}
+        explicit It() : m_node(NULL) {}
+        explicit It(Node<T> * _node) : m_node(_node) {}
 
         bool operator !=(const It<T> & _other) const
         {
-            return node != _other.node;
+            return m_node != _other.m_node;
         }
 
         It & operator ++()
         {
-            if (node) node = node->next;
+            if (m_node) m_node = m_node->next;
             return * this;
         }
 
         It & operator --()
         {
-            if (node) node = node->prev;
+            if (m_node) m_node = m_node->prev;
             return * this;
         }
 
-        T operator*()
+        T & operator*() const
         {
-            return node->value;
+            return m_node->value;
         }
     private:
-        Node<T> * node;
+        Node<T> * m_node;
     };
 
     template <typename T>
     class LinkedList
     {
     public:
-        explicit LinkedList() : m_first(NULL), m_last(NULL) {}
+        explicit LinkedList() : m_first(NULL), m_last(NULL), m_size(0) {}
 
         virtual ~LinkedList()
         {
@@ -90,6 +85,8 @@ namespace containers
                 m_last->next = new Node<T>(_val, m_last, NULL);
                 m_last = m_last->next;
             }
+
+            ++m_size;
         }
 
         void prepend(const T _val)
@@ -102,6 +99,8 @@ namespace containers
                 m_first->prev = new Node<T>(_val, NULL, m_first);
                 m_first = m_first->prev;
             }
+
+            ++m_size;
         }
 
         std::string toString() const
@@ -116,9 +115,28 @@ namespace containers
             return ss.str();
         }
 
+        uint64_t size() const
+        {
+            return m_size;
+        }
+
+        bool contains(const T & _val) const
+        {
+            for(It<T> it = first(); it != end(); ++it)
+            {
+                if (*it == _val)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
     private:
         Node<T> * m_first;
         Node<T> * m_last;
+        uint64_t m_size;
     };
 }
 
