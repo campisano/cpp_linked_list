@@ -59,7 +59,7 @@ namespace containers
     public:
         explicit LinkedList() : m_first(NULL), m_last(NULL), m_size(0) {}
 
-        virtual ~LinkedList()
+        ~LinkedList()
         {
             const Node<T> * to_delete;
             const Node<T> * i = m_first;
