@@ -1,8 +1,8 @@
 #ifndef LINKED_LIST__HPP
 #define LINKED_LIST__HPP
 
-#include <sstream>
 #include <cstdint>
+#include <sstream>
 #include <string>
 
 namespace containers
@@ -14,7 +14,7 @@ namespace containers
             const T & _value, Node * _prev, Node * _next) :
             value(_value), prev(_prev), next(_next) {}
 
-        virtual ~Node() {}
+        ~Node() {}
 
         T value;
         Node * prev;
@@ -75,7 +75,7 @@ namespace containers
         It<T> last() const { return It<T>(m_last); }
         It<T> end() const { return It<T>(NULL); }
 
-        void append(const T _val)
+        void append(const T & _val)
         {
             if(m_first == NULL) {
                 m_first = m_last = new Node<T>(_val, NULL, NULL);
@@ -89,7 +89,7 @@ namespace containers
             ++m_size;
         }
 
-        void prepend(const T _val)
+        void prepend(const T & _val)
         {
             if(m_first == NULL) {
                 m_first = m_last = new Node<T>(_val, NULL, NULL);
