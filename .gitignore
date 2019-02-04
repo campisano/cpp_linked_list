@@ -1,1 +1,7 @@
-/build
+/build/
+
+/ext/src/
+/ext/Makefile.inc
+
+/.cquery_cached_index/
+
